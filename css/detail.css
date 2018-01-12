@@ -1,0 +1,53 @@
+#topBox{
+	margin-top: 36px;
+}
+.cancel_btn{
+	position: absolute;
+	top:115px;left:0px;
+	width: 82px;height: 32px;
+	border:1px solid #CBCBCB;
+	text-align: center;
+	line-height: 32px;
+	color: #898989;
+	border-radius: 2px;
+	background-color: #fff;
+}
+.cancel_btn.hidden{
+	display: none;
+}
+/*已取消标识*/
+.canceled_ico{
+	display: none;
+	margin-top: 72px;
+}
+.canceled_ico.visible{
+	display: block;
+}
+/*取消任务弹窗*/
+.cansel_modal .modal_container{
+	width: 420px;
+	height: 230px;
+	margin-left: -210px;
+	margin-top: -115px;
+	box-sizing: border-box;
+}
+.cansel_modal .modal_body{
+	font-size: 16px;
+	color: #1b9af7;
+	text-align: center;
+	font-weight: bold;
+	margin:36px 0px;
+}
+.cansel_modal .modal_foot{
+	overflow:hidden;
+	width: 284px;
+	margin:0 auto;
+}
+.cansel_modal .btn{
+	width: 129px;
+	float: left;
+}
+.cansel_modal .confirm{
+	margin-left: 14px;
+}
+

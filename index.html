@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" Content="IE=edge,chrome=1"/>
+    <meta http-equiv="Content-Language" Content="zh-CN"/>
+    <meta charset="UTF-8"/>
+    <meta name="keyword" content="跟单"/>
+    <meta name="description" content="跟单超人--自由跟单，从此开始"/>
+	<title>我的派单</title>
+	<link rel="icon" href="img/icon.ico" />
+    <link rel="stylesheet" href="css/common.css" /><!-- 公共样式 -->
+    <link rel="stylesheet" href="css/index.css" />
+    <script type="text/javascript" src="js/plugins/jquery.min.js"></script>
+    <script>
+    	// 未登录状态
+		 var baseToken= Cookies.get("baseToken");
+		if(baseToken==="")window.location.href="login.html";
+    </script>
+</head>
+<body>
+	<section id="section">
+		<div id="content">
+			<!-- 左侧用户栏 -->
+			<div id="userBox">
+				<div class="user_data">
+					<div class="user_head">
+						<img src="img/head.png" alt="" onerror="onerror=null;this.src='img/head.png'" class="user_head_img">
+					</div>
+					<div class="user_info">
+						<p class="user_name">哈哈哈</p>
+						<p class="user_phone">15789565487</p>
+					</div>
+				</div>
+				<div class="my_orders active">
+					<a href="">
+						<span class="icon myOrder_icon"></span>&nbsp;&nbsp;
+						<span>我的派单</span>
+					</a>
+					<span class="active_line">
+						
+					</span>
+				</div>
+			</div><!-- end左侧用户栏 -->
+			<!-- 用户管理 -->
+			<div class="user_manage">
+				<span class="triangle_icon"></span>
+				<ul class="manage_list" id="imgContainer">
+					<li class="manage_item" id="changeHead">修改头像</li>
+					<li class="manage_item" id="logout">退出登录</li>
+				</ul>
+			</div>
+			<!-- end用户管理 -->
+
+
+			<!-- 右侧列表 -->
+			<div id="ListBox">
+				<!-- 我要派单 -->
+				<div class="assign_box">
+					<span class="assign_title">我要派单</span>
+					<ul class="assign_btn_group">
+						<li class="assign_btn cargo_btn" >
+							<a href="assign_cargo.html" target="_blank">
+								<span class="icon assign_icon cargo_icon"></span>
+								<span>大货</span>
+							</a>
+						</li>
+						<li class="assign_btn sample_btn">
+							<a href="assign_sample.html" target="_blank">
+								<span class="icon assign_icon sample_icon"></span>
+								<span>匹样</span>
+							</a>
+						</li>
+						<li class="assign_btn SO_btn">
+							<a href="assign_SO.html" target="_blank">
+								<span class="icon assign_icon SO_icon"></span>
+								<span>SO样</span>
+							</a>
+						</li>
+						<li class="assign_btn color_btn">
+							<a href="assign_color.html" target="_blank">
+								<span class="icon assign_icon color_icon"></span>
+								<span>色样</span>
+							</a>
+						</li>
+					</ul>
+				</div><!-- end我要派单 -->
+
+				<!-- 筛选列表 -->
+				<div class="filter_box">
+					<ul class="status_list lf">
+						<li class="status_item status_all lf active" status="">
+							全部
+						</li>
+						<li class="status_item status_unStart lf " status="5,0">
+							未开始
+						</li>
+						<li class="status_item status_progress lf" status="1,3,4">
+							进行中
+						</li>
+						<li class="status_item status_finished lf" status="2,6">
+							已完成
+						</li>
+					</ul>
+					<div class="search_bar lf">
+						<input type="text" class="search_input">
+						<span class="search_tips">搜索品名/坯布名/跟单员/业务员</span>
+						<div class="search_icon_box ">
+							<span class="icon search_icon"></span>
+						</div>
+					</div>
+				</div>
+				<!-- end筛选列表 -->
+				
+				<!-- 列表为空 -->
+				<div class="list_blank">
+					<div class="blank_img">
+						<img src="img/blank.png" alt="">
+					</div>
+					<p class="blank_txt">暂无派单哦</p>
+				</div>
+				<!-- end列表为空 -->
+				<!-- 列表内容 -->
+				<ul class="order_list" data-page="1">
+					<!-- <li class="list_item">
+						<div class="item_content item_left">
+							<div class="headImgBox">
+								<img src="img/default.png" alt="" class="headImg">
+							</div>
+							<p class="followmanName"><span>跟单员</span><span>李白</span></p>
+						</div>
+						<div class="item_content item_center">
+							<div class="item_center_top">
+								<p>
+									<span class="txt_icon blue">厂</span><span>华东印染厂</span>
+								</p>
+								<p>
+									<span class="txt_icon red">品</span><span>全涤粗针麻灰拉绒布</span>
+								</p>
+							</div>
+							<div class="item_center_bottom">
+								<p>
+									<span class="img_icon date"></span><span>交期：2017-12-05</span>
+								</p>
+								<p>
+									<span class="img_icon user"></span><span>业务员：王安石</span>
+								</p>
+							</div>
+						</div>
+						<div class="item_content item_right">
+							<span class="label_icon type_icon ">大货</span><span class="label_icon tec_icon">印花</span>
+							<a href="###" class="cancel_btn">取消任务</a>
+						</div>
+					</li>
+					<li class="list_item">
+						<div class="item_content item_left">
+							<div class="headImgBox">
+								<img src="img/default.png" alt="" class="headImg">
+							</div>
+							<p class="followmanName"><span>跟单员</span><span>王羲之</span></p>
+						</div>
+						<div class="item_content item_center">
+							<div class="item_center_top">
+								<p>
+									<span class="txt_icon blue">厂</span><span>华东印染厂</span>
+								</p>
+								<p>
+									<span class="txt_icon red">品</span><span>全涤粗针麻灰拉绒布</span>
+								</p>
+							</div>
+							<div class="item_center_bottom">
+								<p>
+									<span class="img_icon date"></span><span>交期：2017-12-05</span>
+								</p>
+								<p>
+									<span class="img_icon user"></span><span>业务员：王安石</span>
+								</p>
+							</div>
+						</div>
+						<div class="item_content item_right">
+							<span class="label_icon type_icon ">大货</span><span class="label_icon tec_icon">印花</span>
+							<a href="###" class="cancel_btn">取消任务</a>
+						</div>
+					</li> -->
+				</ul><!-- end列表内容 -->
+
+			</div><!-- end右侧列表 -->
+		</div>
+	</section>
+		<!-- 取消任务确认弹窗 -->
+	<div class="modal cansel_modal">
+		<div class="modal_container">
+			<div class="modal_content">
+				<span class="modal_close"></span>
+				<div class="modal_head"></div>
+				<div class="modal_body">
+					<p>确认已和跟单员沟通？</p>
+				</div>
+				<div class="modal_foot">
+					<a href="###" class="btn modal_btn blue_btn cansel">取消</a>
+					<a href="###" class="btn modal_btn gray_btn confirm">确认</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end取消任务确认弹窗 -->
+
+	<!-- 列表模板 -->
+	<script id="item_data" type="text/html"> 
+		{{# for(var i = 0, len = d.result.length; i < len; i++){ }}
+			<li class="list_item">
+				<div class="item_content item_left">
+					<div class="headImgBox">
+						<img src="{{d.result[i].followerPicture}}?imageView2/1/w/80/h/80" alt="" class="headImg" onerror="onerror=null;this.src='img/default.png'">
+					</div>
+					<p class="followmanName" ><span>跟单员</span><span data-id="{{d.result[i].followerId}}">{{d.result[i].followerName}}</span></p>
+				</div>
+				<div class="item_content item_center" data-id="{{d.result[i].orderId}}">
+					<div class="item_center_top">
+						<p>
+							<span class="txt_icon blue">厂</span><span data-id="{{d.result[i].factoryId}}">{{d.result[i].factoryName}}</span>
+						</p>
+						<p>
+							<span class="txt_icon red">品</span><span>{{d.result[i].productName}}</span>
+						</p>
+					</div>
+					<div class="item_center_bottom">
+						<p>
+							<span class="img_icon date"></span><span>交期：{{d.result[i].submitDate}}</span>
+						</p>
+						<p>
+							<span class="img_icon user"></span><span data-id="{{d.result[i].salerId}}">业务员：{{d.result[i].salerName}}</span>
+						</p>
+					</div>
+				</div>
+				<div class="item_content item_right">
+					<span class="label_icon type_icon ">{{d.result[i].orderType}}</span><span class="label_icon tec_icon">{{d.result[i].technology}}</span>
+					<a href="###" class="cancel_btn {{d.result[i].cancel}}" data-id="{{d.result[i].orderId}}">取消任务</a>
+					<div class="canceled_ico  {{d.result[i].canceled}}" >
+						<img src="img/cancel01.png" alt="">
+					</div>
+				</div>
+			</li>										
+		{{# } }}
+	</script> 
+	<!-- end列表模板 -->
+
+
+	<script type="text/javascript" src="js/headqiniu.js"></script><!-- 上传头像 -->
+	<script type="text/javascript" src="js/plugins/jquery.particleground.min.js"></script><!-- 背景图插件 -->
+	<script type="text/javascript" src="js/plugins/laytpl.js"></script><!-- 模板插件 -->
+	<script type="text/javascript" src="js/common.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+
+	<script>
+		// 背景图
+	// $('#section').particleground({
+	//     dotColor: '#D1EAFA',
+	//     lineColor: '#DBF0FC',
+	//     density:30000,//密度
+	//     particleRadius:12,//点大小
+	//     lineWidth: 1,//线宽
+	//   });
+	</script>
+</body>
+</html>

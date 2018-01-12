@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" Content="IE=edge,chrome=1"/>
+    <meta http-equiv="Content-Language" Content="zh-CN"/>
+    <meta charset="UTF-8"/>
+    <meta name="keyword" content="跟单"/>
+    <meta name="description" content="跟单超人--自由跟单，从此开始"/>
+	<title>派发色样</title>
+	<link rel="icon" href="img/icon.ico" />
+    <link rel="stylesheet" href="css/common.css" /><!-- 公共样式 -->
+    <link rel="stylesheet" href="css/assign.css" />
+    <link rel="stylesheet" href="css/datepicker.css" /><!-- 日期选择弹窗样式 -->
+    <link rel="stylesheet" href="css/font-awesome.min.css" /><!-- 日期选择弹窗样式 -->
+	<script type="text/javascript" src="js/plugins/jquery.min.js"></script>
+     <script>
+    	// 未登录状态
+		 var baseToken= Cookies.get("baseToken");
+		if(baseToken==="")window.location.href="login.html";
+    </script>
+
+</head>
+<body>
+	<section id="section">
+		<div id="formBox">
+			<div class="form_content">
+				<form action="" id="colorForm">
+					
+				</form>
+				<div class="submit_box">
+					<a href="#" id="submit">提交</a>
+				</div>
+			</div>
+		</div>
+		<!-- 表单模板 -->
+		<script id="formTpl" type="text/html">
+			<p class="form_title">派发色样</p>
+					<!-- 基本信息 -->
+					<div id="basicInfo">
+						<ul class="tab_content">
+							<li>
+								<span class="input_label">品名<span class="required">*</span></span>
+								<input type="text" class="input_txt form_required pname" name="pname" value="{{d.pname}}" maxlength="50">
+								<span class="input_pld">请输入品名</span>
+							</li>
+							<li>
+								<span class="input_label">坯布名<span class="required">*</span></span>
+								<input type="text" class="input_txt form_required clothName" name="clothName" value="{{d.clothName}}" maxlength="50">
+								<span class="input_pld">请输入坯布名</span>
+							</li>
+							<li>
+								<span class="input_label">下单日期<span class="required">*</span></span>
+								<input type="text" class="input_txt datepicker form_required orderDate" name="orderDate" readonly>
+								<!-- <span class="input_pld">2017-07-19</span> -->
+								<span class="select_icon"></span>
+							</li>
+							<li>
+								<span class="input_label">交期<span class="required">*</span></span>
+								<input type="text" class="input_txt datepicker form_required deliveryDate" name="deliveryDate" value="{{d.deliveryDate}}" readonly>
+								<span class="input_pld">2017-08-02</span>
+								<span class="select_icon"></span>
+							</li>
+							<li>
+								<span class="input_label">印染厂<span class="required">*</span></span>
+								<input type="text" class="input_txt factory search_input form_required" name="factory" autocomplete="off" data-url="getFactory" value="{{d.factory}}" data-id={{d.factoryId}} maxlength="25">
+								<span class="input_pld">请输入印染厂名字</span>
+								<span class="select_icon"></span>
+								<ul class="sel_list search_sel_list">
+									
+								</ul>
+							</li>
+							<li>
+								<span class="input_label">业务员<span class="required">*</span></span>
+								<input type="text" class="input_sel salesman form_required" name="salesman" autocomplete="off" data-url="getUserByCompany" readonly value="{{d.salesman}}" data-id={{d.salerId}}>
+								<span class=" input_sel_pld">张三</span>
+								<span class="select_icon"></span>
+								<ul class="sel_list search_sel_list">
+									
+								</ul>
+							</li>
+							<li>
+								<span class="input_label">跟单员<span class="required">*</span></span>
+								<input type="text" class="input_sel followman form_required " name="followman" autocomplete="off" data-url="getUserByCompany" readonly value="{{d.followman}}" data-id={{d.followerId}}>
+								<span class="input_sel_pld">李四</span>
+								<span class="select_icon"></span>
+								<ul class="sel_list search_sel_list">
+									
+								</ul>
+							</li>
+							<li>
+								<span class="input_label">布种<span class="required">*</span></span>
+								<input id="clothType1" type="radio" value="1" name="clothType" {{d.clothTypeChecked1}}><label for="clothType1">针织</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<input id="clothType2" type="radio" value="2" name="clothType" {{d.clothTypeChecked2}}><label for="clothType2">梭织</label>
+							</li>
+							<li >
+								<span class="input_label">工艺<span class="required">*</span></span>
+								<input id="technology1" type="radio" value="1" name="technology" checked><label for="technology1">染色</label>
+							</li>
+							<li >
+								<span class="input_label">色号</span>
+								<input type="text" class="input_txt" name="colorNum" value="{{d.colorNum}}" maxlength="25">
+								<span class="input_pld">请输入色号</span>
+							</li>
+							<li >
+								<span class="input_label">色量<span class="required">*</span></span>
+								<input type="text" class="input_sel form_required" name="colorCount" value="{{d.colorCount}}" readonly>
+								<span class="select_icon"></span>
+								<ul class="sel_list val_sel_list">
+									<li data-id="">ABC</li>
+									<li data-id="">ABCD</li>
+									<li data-id="">ABCDE</li>
+								</ul>
+							</li>
+							<li >
+								<span class="input_label">尺寸<span class="required">*</span></span>
+								<input type="text" class="input_sel form_required" name="size" value="{{d.size}}" readonly>
+								<span class="select_icon"></span>
+								<ul class="sel_list val_sel_list">
+									<li data-id="">工厂尺寸</li>
+									<li data-id="">30x30cm</li>
+									<li data-id="">40x40cm</li>
+									<li data-id="">50x50cm</li>
+								</ul>
+							</li>
+							<li >
+								<span class="input_label">数量<span class="required">*</span></span>
+								<input type="text" class="input_sel form_required" name="count" value="{{d.count}}" readonly>
+								<span class="select_icon"></span>
+								<ul class="sel_list val_sel_list">
+									<li data-id="">一式两份</li>
+									<li data-id="">一式三份</li>
+									<li data-id="">一式四份</li>
+									<li data-id="">一式五份</li>
+								</ul>
+							</li>
+							<li>
+								<span class="input_label">克重g/㎡<span class="required">*</span></span>
+								<input type="text" class="input_txt input_num form_required" name="weight" value="{{d.weight}}" maxlength="10">
+								<span class="input_pld">请输入克重</span>
+							</li>
+							
+							<li>
+								<span class="input_label float_label">光源要求<span class="required">*</span></span>
+								<ul class="chose_btn_group  chose_one" name="lightRequired">
+									<li class="chose_btn_item active">D65</li>
+									<li class="chose_btn_item">CWF</li>
+									<li class="chose_btn_item">TL84</li>
+									<li class="chose_btn_item">A灯</li>
+									<li class="chose_btn_item">U300</li>
+									<li class="chose_btn_item">U3500</li>
+								</ul>
+							</li>
+							
+							<li>
+								<span class="input_label float_label">颜色图</span>
+								<div id="imgContainer">
+									<a href="#" id="pickImg">上传图片</a>&nbsp;&nbsp;
+									<span class="pick_tips">最多3张</span>
+								</div>
+								<ul id="previewImg">
+									{{# for(var i = 0, len = d.imgSrc.length; i < len; i++){ }}
+									 <li>
+										<span class="del_img del_oldImg"></span>
+										<img src="{{d.imgSrc[i]}}" alt="" info='{{d.imgInfo[i]}}'>
+									</li>
+									{{# } }}
+								</ul>
+							</li>
+						</ul>
+					</div>
+					<!-- 备注 -->
+					<div class="tab_content" id="remark">
+						<span class="input_label">备注</span>
+						<textarea name="remark" class="input_txt remark" maxlength="100">{{d.remark}}</textarea>
+						<span class="input_pld">可以描述一下需要注意的事项</span>
+					</div>
+		</script>
+		<!-- 表单模板 -->
+
+
+
+		<!-- 空表单模板 -->
+		<script id="blankFormTpl" type="text/html">
+			<p class="form_title">派发色样</p>
+					<!-- 基本信息 -->
+					<div id="basicInfo">
+						<ul class="tab_content">
+							<li>
+								<span class="input_label">品名<span class="required">*</span></span>
+								<input type="text" class="input_txt form_required pname" name="pname" maxlength="50">
+								<span class="input_pld">请输入品名</span>
+							</li>
+							<li>
+								<span class="input_label">坯布名<span class="required">*</span></span>
+								<input type="text" class="input_txt form_required clothName" name="clothName" maxlength="50">
+								<span class="input_pld">请输入坯布名</span>
+							</li>
+							<li>
+								<span class="input_label">下单日期<span class="required">*</span></span>
+								<input type="text" class="input_txt datepicker form_required orderDate" name="orderDate">
+								<!-- <span class="input_pld">2017-07-19</span> -->
+								<span class="select_icon"></span>
+							</li>
+							<li>
+								<span class="input_label">交期<span class="required">*</span></span>
+								<input type="text" class="input_txt datepicker form_required deliveryDate" name="deliveryDate">
+								<span class="input_pld">2017-08-02</span>
+								<span class="select_icon"></span>
+							</li>
+							<li>
+								<span class="input_label">印染厂<span class="required">*</span></span>
+								<input type="text" class="input_txt factory search_input form_required" name="factory" autocomplete="off" data-url="getFactory" maxlength="25">
+								<span class="input_pld">请输入印染厂名字</span>
+								<span class="select_icon"></span>
+								<ul class="sel_list search_sel_list">
+									
+								</ul>
+							</li>
+							<li>
+								<span class="input_label">业务员<span class="required">*</span></span>
+								<input type="text" class="input_sel salesman form_required" name="salesman" autocomplete="off" data-url="getUserByCompany" readonly>
+								<span class=" input_sel_pld">张三</span>
+								<span class="select_icon"></span>
+								<ul class="sel_list search_sel_list">
+									
+								</ul>
+							</li>
+							<li>
+								<span class="input_label">跟单员<span class="required">*</span></span>
+								<input type="text" class="input_sel followman form_required " name="followman" autocomplete="off" data-url="getUserByCompany" readonly>
+								<span class="input_sel_pld">李四</span>
+								<span class="select_icon"></span>
+								<ul class="sel_list search_sel_list">
+									
+								</ul>
+							</li>
+							<li>
+								<span class="input_label">布种<span class="required">*</span></span>
+								<input id="clothType1" type="radio" value="1" name="clothType" checked><label for="clothType1">针织</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<input id="clothType2" type="radio" value="2" name="clothType"><label for="clothType2">梭织</label>
+							</li>
+							<li >
+								<span class="input_label">工艺<span class="required">*</span></span>
+								<input id="technology1" type="radio" value="1" name="technology" checked><label for="technology1">染色</label>
+							</li>
+							<li >
+								<span class="input_label">色号</span>
+								<input type="text" class="input_txt" name="colorNum" maxlength="25">
+								<span class="input_pld">请输入色号</span>
+							</li>
+							<li >
+								<span class="input_label">色量<span class="required">*</span></span>
+								<input type="text" class="input_sel form_required" name="colorCount" value="ABCD" readonly>
+								<span class="select_icon"></span>
+								<ul class="sel_list val_sel_list">
+									<li data-id="">ABC</li>
+									<li data-id="">ABCD</li>
+									<li data-id="">ABCDE</li>
+								</ul>
+							</li>
+							<li >
+								<span class="input_label">尺寸<span class="required">*</span></span>
+								<input type="text" class="input_sel form_required" name="size" value="40*40cm" readonly>
+								<span class="select_icon"></span>
+								<ul class="sel_list val_sel_list">
+									<li data-id="">工厂尺寸</li>
+									<li data-id="">30*30cm</li>
+									<li data-id="">40*40cm</li>
+									<li data-id="">50*50cm</li>
+								</ul>
+							</li>
+							<li >
+								<span class="input_label">数量<span class="required">*</span></span>
+								<input type="text" class="input_sel form_required" name="count" value="一式三份" readonly>
+								<span class="select_icon"></span>
+								<ul class="sel_list val_sel_list">
+									<li data-id="">一式两份</li>
+									<li data-id="">一式三份</li>
+									<li data-id="">一式四份</li>
+									<li data-id="">一式五份</li>
+								</ul>
+							</li>
+							<li>
+								<span class="input_label">克重g/㎡<span class="required">*</span></span>
+								<input type="text" class="input_txt input_num form_required" name="weight" maxlength="10">
+								<span class="input_pld">请输入克重</span>
+							</li>
+							
+							<li>
+								<span class="input_label float_label">光源要求<span class="required">*</span></span>
+								<ul class="chose_btn_group  chose_one" name="lightRequired">
+									<li class="chose_btn_item active">D65</li>
+									<li class="chose_btn_item">CWF</li>
+									<li class="chose_btn_item">TL84</li>
+									<li class="chose_btn_item">A灯</li>
+									<li class="chose_btn_item">U300</li>
+									<li class="chose_btn_item">U3500</li>
+								</ul>
+							</li>
+							
+							<li>
+								<span class="input_label float_label">颜色图</span>
+								<div id="imgContainer">
+									<a href="#" id="pickImg">上传图片</a>&nbsp;&nbsp;
+									<span class="pick_tips">最多3张</span>
+								</div>
+								<ul id="previewImg">
+									<!-- <li>
+										<span class="del_img"></span>
+										<img src="img/ceshi.jpg" alt="">
+									</li>
+									<li>
+										<img src="img/ceshi.jpg" alt="">
+									</li>
+									<li>
+										<img src="img/ceshi.jpg" alt="">
+									</li> -->
+								</ul>
+							</li>
+						</ul>
+					</div>
+					<!-- 备注 -->
+					<div class="tab_content" id="remark">
+						<span class="input_label">备注</span>
+						<!-- <input type="text" class="input_txt" name="remark"> -->
+						<textarea name="remark" class="input_txt remark" maxlength="100"></textarea>
+						<span class="input_pld">可以描述一下需要注意的事项</span>
+					</div>
+		</script>
+		<!-- 空表单模板 -->
+		
+	</section>
+	<script type="text/javascript" src="js/plugins/bootstrap-datepicker.js"></script><!-- 日期选择弹窗 -->
+	<script type="text/javascript" src="js/plugins/laytpl.js"></script><!-- 模板插件 -->
+	<script type="text/javascript" src="js/common.js"></script>
+	<script type="text/javascript" src="js/assign.js"></script>
+	<script type="text/javascript" src="js/assign_color.js"></script>
+</body>
+</html>

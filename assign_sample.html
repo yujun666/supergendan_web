@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" Content="IE=edge,chrome=1"/>
+    <meta http-equiv="Content-Language" Content="zh-CN"/>
+    <meta charset="UTF-8"/>
+    <meta name="keyword" content="跟单"/>
+    <meta name="description" content="跟单超人--自由跟单，从此开始"/>
+	<title>派发匹样</title>
+	<link rel="icon" href="img/icon.ico" />
+    <link rel="stylesheet" href="css/common.css" /><!-- 公共样式 -->
+    <link rel="stylesheet" href="css/assign.css" />
+    <link rel="stylesheet" href="css/assign_cargo.css" />
+    <link rel="stylesheet" href="css/datepicker.css" /><!-- 日期选择弹窗样式 -->
+    <link rel="stylesheet" href="css/font-awesome.min.css" /><!-- 日期选择弹窗样式 -->
+	<script type="text/javascript" src="js/plugins/jquery.min.js"></script>
+     <script>
+    	// 未登录状态
+		 var baseToken= Cookies.get("baseToken");
+		if(baseToken==="")window.location.href="login.html";
+    </script>
+
+</head>
+<body>
+	<section id="section">
+		<div id="formBox">
+			<ul class="form_tab">
+				<li class="form_tab_item active">
+					<a href="#basicInfo" >基本信息</a>
+				</li>
+				<li class="form_tab_item">
+					<a href="#widthWeight">门幅克重</a>
+				</li>
+				<li class="form_tab_item">
+					<a href="#putNum">投匹数量</a>
+				</li>
+				<li class="form_tab_item">
+					<a href="#physical">物性指标</a>
+				</li>
+				<li class="form_tab_item">
+					<a href="#additional">附加工艺</a>
+				</li>
+			</ul>
+			<!-- 回到顶部 -->
+			<a class="to_top" href="#section">
+				回到顶部
+			</a>
+			<div class="form_content">
+				<form action="" id="sampleForm">
+					
+				</form>
+				<div class="submit_box">
+					<a href="#" id="submit">提交</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- 表单模板 -->
+		<script id="formTpl" type="text/html">
+			<p class="form_title">派发匹样</p>
+					<!-- 基本信息 -->
+					<div id="basicInfo">
+						<ul class="tab_content">
+							<li>
+								<span class="input_label">品名<span class="required">*</span></span>
+								<input type="text" class="input_txt form_required pname" name="pname" value="{{d.pname}}" maxlength="50">
+								<span class="input_pld">请输入品名</span>
+							</li>
+							<li>
+								<span class="input_label">坯布名<span class="required">*</span></span>
+								<input type="text" class="input_txt form_required clothName" name="clothName" value="{{d.clothName}}" maxlength="50">
+								<span class="input_pld">请输入坯布名</span>
+							</li>
+							<li>
+								<span class="input_label">下单日期<span class="required">*</span></span>
+								<input type="text" class="input_txt datepicker form_required orderDate" name="orderDate" readonly>
+								<!-- <span class="input_pld">2017-07-19</span> -->
+								<span class="select_icon"></span>
+							</li>
+							<li>
+								<span class="input_label">交期<span class="required">*</span></span>
+								<input type="text" class="input_txt datepicker form_required deliveryDate" name="deliveryDate" value="{{d.deliveryDate}}" readonly>
+								<span class="input_pld">2017-08-02</span>
+								<span class="select_icon"></span>
+							</li>
+							<li>
+								<span class="input_label">印染厂<span class="required">*</span></span>
+								<input type="text" class="input_txt factory search_input form_required" name="factory" autocomplete="off" data-url="getFactory" value="{{d.factory}}" data-id={{d.factoryId}} maxlength="25">
+								<span class="input_pld">请输入印染厂名字</span>
+								<span class="select_icon"></span>
+								<ul class="sel_list search_sel_list">
+									
+								</ul>
+							</li>
+							<li>
+								<span class="input_label">业务员<span class="required">*</span></span>
+								<input type="text" class="input_sel salesman form_required" name="salesman" autocomplete="off" data-url="getUserByCompany" readonly value="{{d.salesman}}" data-id={{d.salerId}} maxlength="5">
+								<span class=" input_sel_pld">张三</span>
+								<span class="select_icon"></span>
+								<ul class="sel_list search_sel_list">
+									
+								</ul>
+							</li>
+							<li>
+								<span class="input_label">跟单员<span class="required">*</span></span>
+								<input type="text" class="input_sel followman form_required " name="followman" autocomplete="off" data-url="getUserByCompany" readonly value="{{d.followman}}" data-id={{d.followerId}} maxlength="5">
+								<span class="input_sel_pld">李四</span>
+								<span class="select_icon"></span>
+								<ul class="sel_list search_sel_list">
+									
+								</ul>
+							</li>
+						</ul>
+					</div>
+					<!-- 门幅克重 -->
+					<div id="widthWeight">
+						<ul class="tab_content">
+							<li>
+								<span class="input_label">布种<span class="required">*</span></span>
+								<input id="clothType1" type="radio" value="1" name="clothType" {{d.clothTypeChecked1}}><label for="clothType1">针织</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<input id="clothType2" type="radio" value="2" name="clothType" {{d.clothTypeChecked2}}><label for="clothType2">梭织</label>
+							</li>
+							<li id="technology">
+								<span class="input_label">工艺<span class="required">*</span></span>
+								<input id="technology1" type="radio" value="1" name="technology" {{d.technologyChecked1}}><label for="technology1">染色</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<input id="technology2" type="radio" value="2" name="technology" {{d.technologyChecked2}}><label for="technology2"  >印花</label>
+							</li>
+							<li id="sampleNumber">
+								<span class="input_label">色号<span class="required">*</span></span>
+								<input type="text" class="input_txt form_required" name="colorNum" value="{{d.colorNum}}" maxlength="25">
+								<span class="input_pld">请输入色号</span>
+							</li>
+							
+							<li>
+								<span class="input_label">克重g/㎡<span class="required">*</span></span>
+								<input type="text" class="input_txt input_num form_required" name="weight" value="{{d.weight}}" maxlength="10">
+								<span class="input_pld">请输入成品克重</span>
+							</li>
+							<li>
+								<span class="input_label">门幅cm<span class="required">*</span></span>
+								<input type="text" class="input_txt input_num form_required" name="width" value="{{d.width}}" maxlength="10">
+								<span class="input_pld">请输入边到边门幅</span>
+							</li>
+							<li id="groundColor">
+								<span class="input_label">底色</span>
+								<input type="text" class="input_sel" name="groundColor" value="{{d.groundColor}}" maxlength="5">
+								<span class="select_icon"></span>
+								<ul class="sel_list val_sel_list">
+									<li data-id="">本白</li>
+									<li data-id="">漂白</li>
+									<li data-id="">染底</li>
+									<li data-id="">麻灰</li>
+									<li data-id="">坯底</li>
+								</ul>
+							</li>
+							<li>
+								<span class="input_label float_label img_label">颜色图</span>
+								<div id="imgContainer">
+									<a href="#" id="pickImg">上传图片</a>&nbsp;&nbsp;
+									<span class="pick_tips">最多3张</span>
+								</div>
+								<ul id="previewImg">
+									{{# for(var i = 0, len = d.imgSrc.length; i < len; i++){ }}
+									 <li>
+										<span class="del_img del_oldImg"></span>
+										<img src="{{d.imgSrc[i]}}" alt="" info='{{d.imgInfo[i]}}'>
+									</li>
+									{{# } }}
+								</ul>
+							</li>
+						</ul>
+					</div>
+					<!-- 投匹数量 -->
+					<div id="putNum">
+						<ul class="tab_content">
+							<li>
+								<span class="input_label">投坯匹数</span>
+								<input type="text" class="input_txt input_num " name="intoBolt" value="{{d.intoBolt}}" maxlength="20">
+								<span class="input_pld">请输入数字</span>
+							</li>
+							<li>
+								<span class="input_label">投坯数量<span class="required">*</span></span>
+								<input type="text" class="input_txt input_txt_sm input_num form_required" name="intoNum" value="{{d.intoNum}}" maxlength="20">
+								<span class="input_pld input_pld_sm">请输入数字</span>
+								<div class="unit_chose">
+									<input  type="text" name="unit1" class="input_sel" readonly value="米" value="{{d.unit1}}">
+									<span class="select_icon unit_select_icon"></span>
+									<ul class="sel_list unit_sel_list ">
+										<li data-id="">米</li>
+										<li data-id="">公斤</li>
+									</ul>
+								</div>
+								
+							</li>
+							<li>
+								<span class="input_label">成品数量<span class="required">*</span></span>
+								<input type="text" class="input_txt input_txt_sm input_num form_required" name="finishedNum" value="{{d.finishedNum}}" maxlength="20">
+								<span class="input_pld input_pld_sm">请输入数字</span>
+								<div class="unit_chose">
+									<input  type="text" name="unit2" value="米" class="input_sel" readonly value="{{d.unit2}}">
+									<span class="select_icon unit_select_icon"></span>
+									<ul class="sel_list unit_sel_list ">
+										<li data-id="">米</li>
+										<li data-id="">公斤</li>
+									</ul>
+								</div>
+							</li>
+							<li>
+								<span class="input_label">针数寸数</span>
+								<input type="text" class="input_txt " name="pinNumer" value="{{d.pinNumer}}" maxlength="10">
+								<span class="input_pld">请输入针数寸数</span>
+							</li>
+							<li>
+								<span class="input_label">船样米数</span>
+								<input type="text" class="input_txt input_num" name="shippingNumber" value="{{d.shippingNumber}}" maxlength="10">
+								<span class="input_pld">请输入数字</span>
+							</li>
+							
+						</ul>
+					</div>
+					<!-- 物性指标 -->
+					<div id="physical">
+						<ul class="tab_content">
+							<li>
+								<span class="input_label float_label">光源要求<span class="required">*</span></span>
+								<ul class="chose_btn_group  chose_one lightRequired" name="lightRequired" >
+									<li class="chose_btn_item ">D65</li>
+									<li class="chose_btn_item">CWF</li>
+									<li class="chose_btn_item">TL84</li>
+									<li class="chose_btn_item">A灯</li>
+									<li class="chose_btn_item">U300</li>
+									<li class="chose_btn_item">U3500</li>
+								</ul>
+							</li>
+							<li>
+								<span class="input_label float_label">包装要求<span class="required">*</span></span>
+								<ul class="chose_btn_group  chose_one packingRequired" name="packingRequired">
+									<li class="chose_btn_item ">打卷</li>
+									<li class="chose_btn_item">套装</li>
+									<li class="chose_btn_item">挂码</li>
+									<li class="chose_btn_item">打包</li>
+									<li class="chose_btn_item">其他</li>
+								</ul>
+							</li>
+							<li>
+								<span class="input_label float_label">手感要求<span class="required">*</span></span>
+								<ul class="chose_btn_group  chose_one handRequired" name="handRequired">
+									<li class="chose_btn_item ">硬挺剂</li>
+									<li class="chose_btn_item">不上软</li>
+									<li class="chose_btn_item">一般软</li>
+									<li class="chose_btn_item">较软</li>
+									<li class="chose_btn_item">客户来样</li>
+									<li class="chose_btn_item">其他</li>
+								</ul>
+							</li>
+							<li>
+								<span class="input_label">物性指标<span class="required">*</span></span>
+								<ul class="sub_input physicalIndex">
+									<li >
+										<span class="input_label">经向缩水<span class="required">*</span></span>
+										<input type="text" class="input_sel" name="Yshrink" value="{{d.Yshrink}}" readonly>
+										<span class="select_icon"></span>
+										<ul class="sel_list val_sel_list">
+											<li data-id="">0%</li>
+											<li data-id="">1%</li>
+											<li data-id="">2%</li>
+											<li data-id="">3%</li>
+											<li data-id="">4%</li>
+											<li data-id="">5%</li>
+											<li data-id="">6%</li>
+											<li data-id="">7%</li>
+											<li data-id="">8%</li>
+											<li data-id="">9%</li>
+											<li data-id="">10%</li>
+										</ul>
+									</li>
+									<li>
+										<span class="input_label">纬向缩水<span class="required">*</span></span>
+										<input type="text" class="input_sel" name="Xshrink" value="{{d.Xshrink}}" readonly>
+										<span class="select_icon"></span>
+										<ul class="sel_list val_sel_list">
+											<li data-id="">0%</li>
+											<li data-id="">1%</li>
+											<li data-id="">2%</li>
+											<li data-id="">3%</li>
+											<li data-id="">4%</li>
+											<li data-id="">5%</li>
+											<li data-id="">6%</li>
+											<li data-id="">7%</li>
+											<li data-id="">8%</li>
+											<li data-id="">9%</li>
+											<li data-id="">10%</li>
+										</ul>
+									</li>
+									<li>
+										<span class="input_label">扭力<span class="required">*</span></span>
+										<input type="text" class="input_sel" name="torsion" value="{{d.torsion}}" readonly>
+										<span class="select_icon"></span>
+										<ul class="sel_list val_sel_list">
+											<li data-id="">-3.0</li>
+											<li data-id="">-2.5</li>
+											<li data-id="">-2.0</li>
+											<li data-id="">-1.5</li>
+											<li data-id="">-1.0</li>
+											<li data-id="">-0.5</li>
+											<li data-id="">0.0</li>
+											<li data-id="">0.5</li>
+											<li data-id="">1.0</li>
+											<li data-id="">1.5</li>
+											<li data-id="">2.0</li>
+											<li data-id="">2.5</li>
+											<li data-id="">3.0</li>
+											<li data-id="">3.5</li>
+											<li data-id="">4.0</li>
+											<li data-id="">4.5</li>
+											<li data-id="">5.0</li>
+										</ul>
+									</li>
+									<li>
+										<span class="input_label">色牢度<span class="required">*</span></span>
+										<input type="text" class="input_sel" name="colorFastness" value="{{d.colorFastness}}" readonly>
+										<span class="select_icon"></span>
+										<ul class="sel_list val_sel_list">
+											<li data-id="">2.0</li>
+											<li data-id="">2.5</li>
+											<li data-id="">3.0</li>
+											<li data-id="">3.5</li>
+											<li data-id="">4.0</li>
+											<li data-id="">4.5</li>
+											<li data-id="">5.0</li>
+										</ul>
+									</li>
+									<li>
+										<span class="input_label">干磨<span class="required">*</span></span>
+										<input type="text" class="input_sel" name="dryGrind" value="{{d.dryGrind}}" readonly>
+										<span class="select_icon"></span>
+										<ul class="sel_list val_sel_list">
+											<li data-id="">2.0</li>
+											<li data-id="">2.5</li>
+											<li data-id="">3.0</li>
+											<li data-id="">3.5</li>
+											<li data-id="">4.0</li>
+											<li data-id="">4.5</li>
+											<li data-id="">5.0</li>
+										</ul>
+									</li>
+									<li>
+										<span class="input_label">湿磨<span class="required">*</span></span>
+										<input type="text" class="input_sel" name="wetGrind" value="{{d.wetGrind}}" readonly>
+										<span class="select_icon"></span>
+										<ul class="sel_list val_sel_list">
+											<li data-id="">2.0</li>
+											<li data-id="">2.5</li>
+											<li data-id="">3.0</li>
+											<li data-id="">3.5</li>
+											<li data-id="">4.0</li>
+											<li data-id="">4.5</li>
+											<li data-id="">5.0</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+					<!-- 附加工艺 -->
+					<div id="additional" class="tab_content">
+						<span class="input_label ">其他工序（多选）</span>
+						<ul class="chose_btn_group lightRequired chose_multiple">
+							<li class="chose_btn_item shaomao" name="shaomao">烧毛</li>
+							<li class="chose_btn_item shimao" name="shimao">食毛</li>
+							<li class="chose_btn_item zhongdingjiangbian" name="zhongdingjiangbian">中定浆边</li>
+							<li class="chose_btn_item zhongdingqiebian" name="zhongdingqiebian">中定切边</li>
+							<li class="chose_btn_item chengdingjiangbian" name="chengdingjiangbian">成定浆边</li>
+							<li class="chose_btn_item chengdingqiebian" name="chengdingqiebian">成定切边</li>
+							<li class="chose_btn_item penwu" name="penwu">喷雾(成品)</li>
+							<li class="chose_btn_item yusuo" name="yusuo">预缩(成品)</li>
+							<li class="chose_btn_item dapian" name="dapian">大片</li>
+							<li class="chose_btn_item penmo" name="penmo">喷墨</li>
+						</ul>
+					</div>
+					<!-- 备注 -->
+					<div class="tab_content" id="remark">
+						<span class="input_label">备注</span>
+						<textarea name="remark" class="input_txt remark" maxlength="100">{{d.remark}}</textarea>
+						<span class="input_pld">可以描述一下需要注意的事项</span>
+					</div>
+		</script>
+		<!-- 表单模板 -->
+
+
+
+
+
+		<!-- 空表单 -->
+		<script id="blankFormTpl" type="text/html">
+				<p class="form_title">派发匹样</p>
+					<!-- 基本信息 -->
+					<div id="basicInfo">
+						<ul class="tab_content">
+							<li>
+								<span class="input_label">品名<span class="required">*</span></span>
+								<input type="text" class="input_txt form_required pname" name="pname" maxlength="50">
+								<span class="input_pld">请输入品名</span>
+							</li>
+							<li>
+								<span class="input_label">坯布名<span class="required">*</span></span>
+								<input type="text" class="input_txt form_required clothName" name="clothName" maxlength="50">
+								<span class="input_pld">请输入坯布名</span>
+							</li>
+							<li>
+								<span class="input_label">下单日期<span class="required">*</span></span>
+								<input type="text" class="input_txt datepicker form_required orderDate" name="orderDate">
+								<!-- <span class="input_pld">2017-07-19</span> -->
+								<span class="select_icon"></span>
+							</li>
+							<li>
+								<span class="input_label">交期<span class="required">*</span></span>
+								<input type="text" class="input_txt datepicker form_required deliveryDate" name="deliveryDate">
+								<span class="input_pld">2017-08-02</span>
+								<span class="select_icon"></span>
+							</li>
+							<li>
+								<span class="input_label">印染厂<span class="required">*</span></span>
+								<input type="text" class="input_txt factory search_input form_required" name="factory" autocomplete="off" data-url="getFactory" maxlength="25">
+								<span class="input_pld">请输入印染厂名字</span>
+								<span class="select_icon"></span>
+								<ul class="sel_list search_sel_list">
+									
+								</ul>
+							</li>
+							<li>
+								<span class="input_label">业务员<span class="required">*</span></span>
+								<input type="text" class="input_sel salesman form_required" name="salesman" autocomplete="off" data-url="getUserByCompany" readonly>
+								<span class=" input_sel_pld">张三</span>
+								<span class="select_icon"></span>
+								<ul class="sel_list search_sel_list">
+									
+								</ul>
+							</li>
+							<li>
+								<span class="input_label">跟单员<span class="required">*</span></span>
+								<input type="text" class="input_sel followman form_required " name="followman" autocomplete="off" data-url="getUserByCompany" readonly>
+								<span class="input_sel_pld">李四</span>
+								<span class="select_icon"></span>
+								<ul class="sel_list search_sel_list">
+									
+								</ul>
+							</li>
+						</ul>
+					</div>
+					<!-- 门幅克重 -->
+					<div id="widthWeight">
+						<ul class="tab_content">
+							<li>
+								<span class="input_label">布种<span class="required">*</span></span>
+								<input id="clothType1" type="radio" value="1" name="clothType" checked><label for="clothType1">针织</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<input id="clothType2" type="radio" value="2" name="clothType"><label for="clothType2">梭织</label>
+							</li>
+							<li id="technology">
+								<span class="input_label">工艺<span class="required">*</span></span>
+								<input id="technology1" type="radio" value="1" name="technology" checked><label for="technology1">染色</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<input id="technology2" type="radio" value="2" name="technology"><label for="technology2">印花</label>
+							</li>
+							<li id="sampleNumber">
+								<span class="input_label">色号<span class="required">*</span></span>
+								<input type="text" class="input_txt form_required" name="colorNum" maxlength="25">
+								<span class="input_pld">请输入色号</span>
+							</li>
+							
+							<li>
+								<span class="input_label">克重g/㎡<span class="required">*</span></span>
+								<input type="text" class="input_txt input_num form_required" name="weight" maxlength="10">
+								<span class="input_pld">请输入成品克重</span>
+							</li>
+							<li>
+								<span class="input_label">门幅cm<span class="required">*</span></span>
+								<input type="text" class="input_txt input_num form_required" name="width" maxlength="10">
+								<span class="input_pld">请输入边到边门幅</span>
+							</li>
+							<li id="groundColor">
+								<span class="input_label">底色</span>
+								<input type="text" class="input_sel" name="groundColor" value="本白" >
+								<span class="select_icon"></span>
+								<ul class="sel_list val_sel_list">
+									<li data-id="">本白</li>
+									<li data-id="">漂白</li>
+									<li data-id="">染底</li>
+									<li data-id="">麻灰</li>
+									<li data-id="">坯底</li>
+								</ul>
+							</li>
+							<li >
+								<span class="input_label float_label img_label">颜色图</span>
+								<div id="imgContainer">
+									<a href="#" id="pickImg">上传图片</a>&nbsp;&nbsp;
+									<span class="pick_tips">最多3张</span>
+								</div>
+								<ul id="previewImg">
+									
+								</ul>
+							</li>
+						</ul>
+					</div>
+					<!-- 投匹数量 -->
+					<div id="putNum">
+						<ul class="tab_content">
+							<li>
+								<span class="input_label">投坯匹数</span>
+								<input type="text" class="input_txt input_num " name="intoBolt" maxlength="10">
+								<span class="input_pld">请输入数字</span>
+							</li>
+							<li>
+								<span class="input_label">投坯数量<span class="required">*</span></span>
+								<input type="text" class="input_txt input_txt_sm input_num form_required" name="intoNum" maxlength="20">
+								<span class="input_pld input_pld_sm">请输入数字</span>
+								<div class="unit_chose">
+									<input  type="text" name="unit1" class="input_sel" readonly value="米">
+									<span class="select_icon unit_select_icon"></span>
+									<ul class="sel_list unit_sel_list ">
+										<li data-id="">米</li>
+										<li data-id="">公斤</li>
+									</ul>
+								</div>
+								
+							</li>
+							<li>
+								<span class="input_label">成品数量<span class="required">*</span></span>
+								<input type="text" class="input_txt input_txt_sm input_num form_required" name="finishedNum" maxlength="20">
+								<span class="input_pld input_pld_sm">请输入数字</span>
+								<div class="unit_chose">
+									<input  type="text" name="unit2" value="米" class="input_sel" readonly>
+									<span class="select_icon unit_select_icon"></span>
+									<ul class="sel_list unit_sel_list ">
+										<li data-id="">米</li>
+										<li data-id="">公斤</li>
+									</ul>
+								</div>
+							</li>
+							<li>
+								<span class="input_label">针数寸数</span>
+								<input type="text" class="input_txt " name="pinNumer" maxlength="10">
+								<span class="input_pld">请输入针数寸数</span>
+							</li>
+							<li>
+								<span class="input_label">船样米数</span>
+								<input type="text" class="input_txt input_num" name="shippingNumber" maxlength="10">
+								<span class="input_pld">请输入数字</span>
+							</li>
+							
+						</ul>
+					</div>
+					<!-- 物性指标 -->
+					<div id="physical">
+						<ul class="tab_content">
+							<li>
+								<span class="input_label float_label">光源要求<span class="required">*</span></span>
+								<ul class="chose_btn_group  chose_one" name="lightRequired">
+									<li class="chose_btn_item active">D65</li>
+									<li class="chose_btn_item">CWF</li>
+									<li class="chose_btn_item">TL84</li>
+									<li class="chose_btn_item">A灯</li>
+									<li class="chose_btn_item">U300</li>
+									<li class="chose_btn_item">U3500</li>
+								</ul>
+							</li>
+							<li>
+								<span class="input_label float_label">包装要求<span class="required">*</span></span>
+								<ul class="chose_btn_group  chose_one" name="packingRequired">
+									<li class="chose_btn_item active">打卷</li>
+									<li class="chose_btn_item">套装</li>
+									<li class="chose_btn_item">挂码</li>
+									<li class="chose_btn_item">打包</li>
+									<li class="chose_btn_item">其他</li>
+								</ul>
+							</li>
+							<li>
+								<span class="input_label float_label">手感要求<span class="required">*</span></span>
+								<ul class="chose_btn_group  chose_one" name="handRequired">
+									<li class="chose_btn_item active">硬挺剂</li>
+									<li class="chose_btn_item">不上软</li>
+									<li class="chose_btn_item">一般软</li>
+									<li class="chose_btn_item">较软</li>
+									<li class="chose_btn_item">客户来样</li>
+									<li class="chose_btn_item">其他</li>
+								</ul>
+							</li>
+							<li>
+								<span class="input_label">物性指标<span class="required">*</span></span>
+								<ul class="sub_input physicalIndex">
+									<li >
+										<span class="input_label">经向缩水<span class="required">*</span></span>
+										<input type="text" class="input_sel" name="Yshrink" value="3%" readonly>
+										<span class="select_icon"></span>
+										<ul class="sel_list val_sel_list">
+											<li data-id="">0%</li>
+											<li data-id="">1%</li>
+											<li data-id="">2%</li>
+											<li data-id="">3%</li>
+											<li data-id="">4%</li>
+											<li data-id="">5%</li>
+											<li data-id="">6%</li>
+											<li data-id="">7%</li>
+											<li data-id="">8%</li>
+											<li data-id="">9%</li>
+											<li data-id="">10%</li>
+										</ul>
+									</li>
+									<li>
+										<span class="input_label">纬向缩水<span class="required">*</span></span>
+										<input type="text" class="input_sel" name="Xshrink" value="5%" readonly>
+										<span class="select_icon"></span>
+										<ul class="sel_list val_sel_list">
+											<li data-id="">0%</li>
+											<li data-id="">1%</li>
+											<li data-id="">2%</li>
+											<li data-id="">3%</li>
+											<li data-id="">4%</li>
+											<li data-id="">5%</li>
+											<li data-id="">6%</li>
+											<li data-id="">7%</li>
+											<li data-id="">8%</li>
+											<li data-id="">9%</li>
+											<li data-id="">10%</li>
+										</ul>
+									</li>
+									<li>
+										<span class="input_label">扭力<span class="required">*</span></span>
+										<input type="text" class="input_sel" name="torsion" value="0.5" readonly>
+										<span class="select_icon"></span>
+										<ul class="sel_list val_sel_list">
+											<li data-id="">-3.0</li>
+											<li data-id="">-2.5</li>
+											<li data-id="">-2.0</li>
+											<li data-id="">-1.5</li>
+											<li data-id="">-1.0</li>
+											<li data-id="">-0.5</li>
+											<li data-id="">0.0</li>
+											<li data-id="">0.5</li>
+											<li data-id="">1.0</li>
+											<li data-id="">1.5</li>
+											<li data-id="">2.0</li>
+											<li data-id="">2.5</li>
+											<li data-id="">3.0</li>
+											<li data-id="">3.5</li>
+											<li data-id="">4.0</li>
+											<li data-id="">4.5</li>
+											<li data-id="">5.0</li>
+										</ul>
+									</li>
+									<li>
+										<span class="input_label">色牢度<span class="required">*</span></span>
+										<input type="text" class="input_sel" name="colorFastness" value="3.5" readonly>
+										<span class="select_icon"></span>
+										<ul class="sel_list val_sel_list">
+											<li data-id="">2.0</li>
+											<li data-id="">2.5</li>
+											<li data-id="">3.0</li>
+											<li data-id="">3.5</li>
+											<li data-id="">4.0</li>
+											<li data-id="">4.5</li>
+											<li data-id="">5.0</li>
+										</ul>
+									</li>
+									<li>
+										<span class="input_label">干磨<span class="required">*</span></span>
+										<input type="text" class="input_sel" name="dryGrind" value="3.5" readonly>
+										<span class="select_icon"></span>
+										<ul class="sel_list val_sel_list">
+											<li data-id="">2.0</li>
+											<li data-id="">2.5</li>
+											<li data-id="">3.0</li>
+											<li data-id="">3.5</li>
+											<li data-id="">4.0</li>
+											<li data-id="">4.5</li>
+											<li data-id="">5.0</li>
+										</ul>
+									</li>
+									<li>
+										<span class="input_label">湿磨<span class="required">*</span></span>
+										<input type="text" class="input_sel" name="wetGrind" value="3.5" readonly>
+										<span class="select_icon"></span>
+										<ul class="sel_list val_sel_list">
+											<li data-id="">2.0</li>
+											<li data-id="">2.5</li>
+											<li data-id="">3.0</li>
+											<li data-id="">3.5</li>
+											<li data-id="">4.0</li>
+											<li data-id="">4.5</li>
+											<li data-id="">5.0</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+					<!-- 附加工艺 -->
+					<div id="additional" class="tab_content">
+						<span class="input_label ">其他工序（多选）</span>
+						<ul class="chose_btn_group lightRequired chose_multiple">
+							<li class="chose_btn_item active" name="shaomao">烧毛</li>
+							<li class="chose_btn_item" name="shimao">食毛</li>
+							<li class="chose_btn_item" name="zhongdingjiangbian">中定浆边</li>
+							<li class="chose_btn_item" name="zhongdingqiebian">中定切边</li>
+							<li class="chose_btn_item" name="chengdingjiangbian">成定浆边</li>
+							<li class="chose_btn_item" name="chengdingqiebian">成定切边</li>
+							<li class="chose_btn_item" name="penwu">喷雾(成品)</li>
+							<li class="chose_btn_item" name="yusuo">预缩(成品)</li>
+							<li class="chose_btn_item" name="dapian">大片</li>
+							<li class="chose_btn_item" name="penmo">喷墨</li>
+						</ul>
+					</div>
+					<!-- 备注 -->
+					<div class="tab_content" id="remark">
+						<span class="input_label">备注</span>
+						<!-- <input type="text" class="input_txt" name="remark"> -->
+						<textarea name="remark" class="input_txt remark" maxlength="100"></textarea>
+						<span class="input_pld">可以描述一下需要注意的事项</span>
+					</div>
+				</script>
+				<!-- end 空表单 -->
+		
+	</section>
+	<script type="text/javascript" src="js/plugins/bootstrap-datepicker.js"></script><!-- 日期选择弹窗 -->
+	<script type="text/javascript" src="js/plugins/laytpl.js"></script><!-- 模板插件 -->
+	<script type="text/javascript" src="js/common.js"></script>
+	<script type="text/javascript" src="js/assign.js"></script>
+	<script type="text/javascript" src="js/assign_sample.js"></script>
+</body>
+</html>

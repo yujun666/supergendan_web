@@ -1,0 +1,153 @@
+#section{
+    min-height: 100vh;
+	overflow:hidden;
+    background-color: #f0f0f0;
+
+}
+#content{
+    width: 1000px;
+    min-height: 100vh;
+    margin: 0 auto;
+}
+#headTips{
+	text-align: center;
+	font-size: 18px;
+	color: #828282;
+	font-weight: bold;
+	height: 74px;
+	line-height: 74px;
+}
+#topBox{
+    background-color: #fff;
+    height: 248px;
+    padding:30px 0px 20px 152px;
+    position: relative;
+    box-sizing: border-box;
+	
+}
+#mainBox{
+    background-color: #fff;
+    margin-top: 20px;
+	
+}
+/*头部卡片*/
+.item_center{
+	/*width:270px;*/
+	cursor: pointer;
+	font-size: 16px;
+}
+
+.item_center_top>p{
+	margin-bottom: 22px;
+	color:#323232;
+}
+.txt_icon{
+	display: inline-block;
+	width: 18px;height: 18px;
+	line-height: 18px;
+	color: #fff;
+	text-align: center;
+	border-radius: 3px;
+	background-color: #1B9AF7;
+	font-size: 12px;
+	margin-right: 13px;
+}
+.txt_icon.blue{
+	background-color: #1B9AF7;
+}
+.txt_icon.red{
+	background-color: #FF003E;
+}
+.item_center_bottom{
+	margin-top: 10px;
+}
+.item_center_bottom>p{
+	margin-bottom: 6px;
+	color: #808080;
+}
+.img_icon{
+	display: inline-block;
+	width: 20px;height: 20px;
+	background: url(../img/sprites.png) no-repeat -61px -22px;
+	position: relative;
+	top: 8px;
+	margin-right: 13px;
+}
+.img_icon.date{
+	background-position: -61px -22px;
+}
+.img_icon.user{
+	background-position: -81px -22px;
+}
+.item_right{
+	position: absolute;
+	top:0px;right: 122px;
+}
+.label_icon{
+	display: inline-block;
+	width: 38px;
+	height: 23px;
+	line-height: 23px;
+	text-align: center;
+	color: #fff;
+	background-color: #1B9AF7;
+}
+.label_icon.type_icon{
+	background-color: #1B9AF7;
+	margin-right: 14px;
+}
+.label_icon.tec_icon{
+	background-color: #FF003E;
+}
+/*头部卡片*/
+/*派单参数*/
+.main_title{
+	font-size: 22px;
+	color:#646464;
+	padding:25px 0 25px 152px;
+}
+.arg_list{
+	padding:6px 22px 56px 152px;
+	font-size: 16px;
+	color: #7a7a7a;
+	line-height: 32px;
+}
+.arg_item.hidden{
+	display: none;
+}
+.arg_item>.img_box{
+	margin-top: 23px;
+}
+.arg_item>.img_box img{
+	width: 612px;
+	height: 270px;
+}
+.arg_item>.img_box img.zoomify.zoomed{
+	width:100%;
+	height: 100%
+}
+/*end派单参数*/
+#bottom_btn{
+	padding:62px 152px 45px 152px;
+	padding-bottom: 99px;
+}
+#bottom_btn>.btn{
+	float: left;
+	margin:0 18px;
+}
+#bottom_btn>.btn.submit{
+	float: right;
+}
+/*图片预览*/
+.img_modal{
+	/*display: block;*/
+	position: fixed;
+}
+.img_modal .modal_container{
+	width: 800px;
+	margin-left: -400px;
+	height: 800px;
+	margin-top: -400px;
+	overflow-y: auto;
+}
+.img_modal .modal_container img{width: 100%}

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" Content="IE=edge,chrome=1"/>
+    <meta http-equiv="Content-Language" Content="zh-CN"/>
+    <meta charset="UTF-8"/>
+    <meta name="keyword" content="跟单"/>
+    <meta name="description" content="跟单超人--自由跟单，从此开始"/>
+	<title>详情</title>
+	<link rel="icon" href="img/icon.ico" />
+    <link rel="stylesheet" href="css/common.css" /><!-- 公共样式 -->
+    <link rel="stylesheet" href="css/confirm.css" />
+    <link rel="stylesheet" href="css/detail.css" />
+	<script type="text/javascript" src="js/plugins/jquery.min.js"></script>
+    <script>
+    	// 未登录状态
+		 var baseToken= Cookies.get("baseToken");
+		if(baseToken==="")window.location.href="login.html";
+    </script>
+</head>
+<body>
+	<section id="section">
+		<div id="content">
+			
+		</div>
+	</section>
+		<!-- 取消任务确认弹窗 -->
+	<div class="modal cansel_modal">
+		<div class="modal_container">
+			<div class="modal_content">
+				<span class="modal_close"></span>
+				<div class="modal_head"></div>
+				<div class="modal_body">
+					<p>确认已和跟单员沟通？</p>
+				</div>
+				<div class="modal_foot">
+					<a href="###" class="btn modal_btn blue_btn cansel">取消</a>
+					<a href="###" class="btn modal_btn gray_btn confirm">确认</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end取消任务确认弹窗 -->
+	<!-- 图片预览层 -->
+	<div class="modal img_modal">
+		<div class="modal_container">
+			<img src="" alt="" onerror="onerror=null;this.src='img/default_img.png'">
+		</div>
+	</div>
+	<!-- end图片预览层 -->
+
+	<script id="detail_arg" type="text/html">
+			<div id="topBox">
+				<div class="item_content item_center">
+					<div class="item_center_top">
+						<p>
+							<span class="txt_icon blue">厂</span><span>{{d.orderDTO.factoryName}}</span>
+						</p>
+						<p>
+							<span class="txt_icon red">品</span><span>{{d.orderDTO.productName}}</span>
+						</p>
+					</div>
+					<div class="item_center_bottom">
+						<p>
+							<span class="img_icon date"></span><span>下单日期：{{d.orderDTO.createDate}}</span>
+						</p>
+						<p>
+							<span class="img_icon date"></span><span>交期：{{d.orderDTO.submitDate}}</span>
+						</p>
+						<p>
+							<span class="img_icon user"></span><span>业务员：{{d.orderDTO.salerName}}</span>
+						</p>
+						<p>
+							<span class="img_icon user"></span><span>跟单员：{{d.orderDTO.followerName}}</span>
+						</p>
+					</div>
+				</div>
+				<div class="item_content item_right">
+					<span class="label_icon type_icon ">{{d.orderType}}</span><span class="label_icon tec_icon">{{d.technology}}</span>
+					<a href="###" class="cancel_btn {{d.cancel}}" data-id="{{d.orderDTO.orderId}}">取消任务</a>
+					<div class="canceled_ico  {{d.canceled}}" >
+						<img src="img/cancel01.png" alt="">
+					</div>
+				</div>
+			</div>
+			<div id="mainBox">
+				<p class="main_title">派单参数</p>
+				<ul class="arg_list">
+					<li class="arg_item">
+						<span class="arg_name">坯布名：</span>
+						<span class="arg_val">{{d.orderDTO.clothName}}</span>
+					</li>
+					<li class="arg_item">
+						<span class="arg_name">布种：</span>
+						<span class="arg_val">{{d.clothType}}</span>
+					</li>
+					<li class="arg_item">
+						<span class="arg_name">工艺：</span>
+						<span class="arg_val">{{d.technology}}</span>
+					</li>
+					<li class="arg_item">
+						<span class="arg_name">{{d.numName}}：</span><!-- 花号色号 -->
+						<span class="arg_val">{{d.colorNum}}</span>
+					</li>
+					<li class="arg_item">
+						<span class="arg_name">克重g/㎡：</span>
+						<span class="arg_val">{{d.subData.grams}}</span>
+					</li>
+					<li class="arg_item">
+						<span class="arg_name">门幅cm：</span>
+						<span class="arg_val">{{d.subData.width}}</span>
+					</li>
+					<li class="arg_item {{d.GCvisible}}">
+						<span class="arg_name">底色：</span>
+						<span class="arg_val">{{d.subData.backgroundColor}}</span>
+					</li>
+					<li class="arg_item ">
+						<span class="arg_name">回位：</span>
+						<span class="arg_val">{{d.subData.recoil}}</span>
+					</li>
+					<li class="arg_item ">
+						<span class="arg_name">尺寸：</span>
+						<span class="arg_val">{{d.subData.size}}</span>
+					</li>
+					<li class="arg_item ">
+						<span class="arg_name">数量：</span>
+						<span class="arg_val">{{d.subData.number}}</span>
+					</li>
+					<li class="arg_item">
+						<span class="arg_name">投坯匹数：</span>
+						<span class="arg_val">{{d.orderDTO.volume}}</span>
+					</li>
+					<li class="arg_item">
+						<span class="arg_name">投坯数量：</span>
+						<span class="arg_val">{{d.orderDTO.allQuantity}}</span>
+						<span class="arg_val">{{d.orderDTO.quantityUnit}}</span>
+					</li>
+					<li class="arg_item">
+						<span class="arg_name">成品数量：</span>
+						<span class="arg_val">{{d.orderDTO.expectTarget}}</span>
+						<span class="arg_val">{{d.orderDTO.quantityUnit}}</span>
+					</li>
+					<li class="arg_item">
+						<span class="arg_name">针数寸数：</span>
+						<span class="arg_val">{{d.subData.pinNumer}}</span>
+					</li>
+					<li class="arg_item">
+						<span class="arg_name">船样米数：</span>
+						<span class="arg_val">{{d.subData.shippingNumber}}</span>
+					</li>
+					<li class="arg_item">
+						<span class="arg_name">光源要求：</span>
+						<span class="arg_val">{{d.subData.lightRequired}}</span>
+					</li>
+					<li class="arg_item">
+						<span class="arg_name">包装要求：</span>
+						<span class="arg_val">{{d.subData.packingRequired}}</span>
+					</li>
+					<li class="arg_item">
+						<span class="arg_name">手感要求：</span>
+						<span class="arg_val">{{d.subData.handRequired}}</span>
+					</li>
+					<li class="arg_item physicalIndex">
+						<span class="arg_name">物性指标：</span>
+						<span class="arg_val">
+							<span class="arg_val_name">经向缩水:</span>
+							<span class="arg_val_val">{{d.Yshrink}}</span>，
+							<span class="arg_val_name">纬向缩水:</span>
+							<span class="arg_val_val">{{d.Xshrink}}</span>，
+							<span class="arg_val_name">扭力:</span>
+							<span class="arg_val_val">{{d.torsion}}</span>，
+							<span class="arg_val_name">色牢度:</span>
+							<span class="arg_val_val">{{d.colorFastness}}</span>，
+							<span class="arg_val_name">干磨:</span>
+							<span class="arg_val_val">{{d.dryGrind}}</span>，
+							<span class="arg_val_name">湿磨:</span>
+							<span class="arg_val_val">{{d.wetGrind}}</span>
+						</span>
+					</li>
+					<li class="arg_item">
+						<span class="arg_name">其他工序：</span>
+						<span class="arg_val">{{d.others}}</span>
+						
+					</li>
+					<li class="arg_item">
+						<span class="arg_name">备注：</span>
+						<span class="arg_val">{{d.subData.remark}}</span>
+					</li>
+					<li class="arg_item">
+						{{# for(var i = 0, len = d.imgSrc.length; i < len; i++){ }}
+							<div class="img_box">
+								<p><img src="{{d.imgSrc[i]}}" alt="" onerror="onerror=null;this.src='img/default_img.png'"></p>
+							</div>
+						{{# } }}
+						
+						
+					</li>
+				</ul>
+			</div>
+	</script>
+	<script type="text/javascript" src="js/plugins/laytpl.js"></script><!-- 模板插件 -->
+	<script type="text/javascript" src="js/common.js"></script>
+	<script type="text/javascript" src="js/detail.js"></script>
+</body>
+</html>

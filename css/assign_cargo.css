@@ -1,0 +1,60 @@
+/*投坯数量*/
+.sel_list.unit_sel_list{
+	/*display: block;*/
+	left:493px;
+	width: 61px;
+}
+.tab_content .input_txt.input_txt_sm{
+	width: 395px;
+}
+.unit_chose{
+	float: right;
+}
+.unit_chose .input_sel{
+	width: 63px;
+	padding-right: 16px;
+	padding-left: 0px;
+	text-align: center;
+}
+.tab_content .input_pld.input_pld_sm{
+	width: 380px;
+}
+.select_icon.unit_select_icon{
+	position: absolute;
+	top:18px;right: 10px;
+	width: 7px;
+	height: 5px;
+	background: url(../img/sprites.png) -373px 0px;
+}
+/*物性指标*/
+
+.sub_input>li{
+	margin-top: 22px;
+	line-height: 28px;
+	position: relative;
+}
+.sub_input .input_label{
+	margin-left: 28px;
+}
+.sub_input .input_sel{
+	width: 440px;
+}
+.sub_input .sel_list{
+	width: 438px;
+	left: 116px;
+}
+
+/*其他工序*/
+#additional .input_label{
+	display: block;
+}
+#additional .chose_btn_group{
+	float: none;
+	margin-top: 20px;
+	margin-left: 91px;
+}
+
+
+#groundColor{
+	display: none;
+}
